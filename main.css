@@ -1,0 +1,12 @@
+.handsontable tbody th.ht__highlight,
+.handsontable thead th.ht__highlight {
+  background-color: darkcyan;
+}
+
+#export-file {
+  background-color: darkcyan;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-weight: 600px;
+}
