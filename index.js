@@ -2,21 +2,13 @@ const container = document.querySelector("#example");
 const button = document.querySelector("#export-file");
 const showCell = document.getElementById("show-cell");
 const cellPosition = document.getElementById("cell-position");
-
+const exportExcel = document.getElementById("export-excel");
 const hot = new Handsontable(container, {
-  data: [
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-  ],
+  startRows: 10,
+  startCols: 10,
   width: "auto",
   height: "auto",
+  dropdownMenu: true,
   rowHeaders: true,
   colHeaders: true,
   selectionMode: "multiple",
@@ -43,7 +35,7 @@ button.addEventListener("click", () => {
 const table = document.getElementsByTagName("table")[0];
 const cells = table.getElementsByTagName("td");
 
-for (let i = 1; i < cells.length; i++) {
+for (let i = 0; i < cells.length; i++) {
   let cell = cells[i];
   cell.onclick = function (e) {
     let cellValue = e.target.innerHTML;
@@ -53,6 +45,13 @@ for (let i = 1; i < cells.length; i++) {
     let cellIndex = this.cellIndex;
     let rowIndex = this.parentNode.rowIndex;
     cellPosition.innerText = `${cellValue} Cell is in ${cellIndex}, ${rowIndex}.`;
-    console.log(cellIndex, rowIndex);
   };
 }
+
+exportExcel.addEventListener("click", () => {
+  /* Create worksheet from HTML DOM TABLE */
+  const wb = XLSX.utils.table_to_book(table, { sheet: "sheet-1" });
+
+  /* Export to file (start a download) */
+  XLSX.writeFile(wb, "MyTable.xlsx");
+});
