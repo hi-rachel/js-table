@@ -48,10 +48,11 @@ for (let i = 0; i < cells.length; i++) {
   };
 }
 
-exportExcel.addEventListener("click", () => {
-  /* Create worksheet from HTML DOM TABLE */
-  const wb = XLSX.utils.table_to_book(table, { sheet: "sheet-1" });
+let newTable = table;
+newTable.deleteTHead();
 
-  /* Export to file (start a download) */
-  XLSX.writeFile(wb, "MyTable.xlsx");
+exportExcel.addEventListener("click", () => {
+  const wb = XLSX.utils.table_to_book(newTable, { sheet: "sheet-1" });
+
+  XLSX.writeFile(wb, "MyTable.xls");
 });
