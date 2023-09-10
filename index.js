@@ -28,7 +28,6 @@ button.addEventListener("click", () => {
     filename: "Handsontable-CSV-file_[YYYY]-[MM]-[DD]",
     mimeType: "text/csv",
     rowDelimiter: "\r\n",
-    rowHeaders: true,
   });
 });
 
@@ -48,11 +47,32 @@ for (let i = 0; i < cells.length; i++) {
   };
 }
 
-let newTable = table;
-newTable.deleteTHead();
+const rows = 10;
+const cols = 10;
 
-exportExcel.addEventListener("click", () => {
-  const wb = XLSX.utils.table_to_book(newTable, { sheet: "sheet-1" });
+function exportToExcel() {
+  for (let i = 1; i <= rows; i++) {
+    for (let j = 1; j < cols; j++) {
+      const input = table.rows[i].cells[j].querySelector("input");
+      if (input) {
+        table.rows[i].cells[j].innerText = input.value;
+      }
+    }
+  }
+  // table을 clonedTable에 복사
+  const clonedTable = table.cloneNode(true);
 
-  XLSX.writeFile(wb, "MyTable.xls");
-});
+  // 위쪽 헤더 제거
+  clonedTable.deleteRow(0);
+  // 왼쪽 헤더 제거
+  for (let i = 0; i < rows; i++) {
+    clonedTable.rows[i].deleteCell(0);
+  }
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.table_to_sheet(clonedTable);
+  XLSX.utils.book_append_sheet(wb, ws, "sheet1");
+  XLSX.writeFile(wb, "spreadsheet.xlsx");
+}
+
+exportExcel.addEventListener("click", exportToExcel);
